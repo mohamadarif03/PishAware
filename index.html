@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PishAware Hero Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 50px;
+        }
+
+        /* Scroll Animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfcfc;
+            color: #111;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            zoom: 0.65;
+        }
+
+        .pattern-bg {
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 14px 14px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #111;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .sign-in {
+            color: #111;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            border: 1px solid #d1d5db;
+            color: #111;
+            text-decoration: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: #111;
+            background: #f9fafb;
+        }
+
+        /* Hero Container */
+        .hero-section {
+            position: relative;
+            height: calc(100vh - 80px);
+            min-height: 750px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Center Content */
+        .hero-center {
+            text-align: center;
+            z-index: 5;
+            max-width: 800px;
+            margin-top: -5rem;
+        }
+
+        .hero-icon {
+            width: 72px;
+            height: 72px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08), inset 0 -4px 10px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            margin: 0 auto 2.5rem;
+        }
+
+        h1 {
+            font-size: 4.8rem;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -2.5px;
+            margin-bottom: 1.5rem;
+            color: #111;
+        }
+
+        h1 .text-grey {
+            color: #9ca3af;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: #4b5563;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+
+        .btn-solid {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn-solid:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* Floating Cards Global Styles */
+        .folder-card {
+            position: absolute;
+            z-index: 2;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.06));
+        }
+
+        .folder-tab {
+            background: #fff;
+            height: 35px;
+            width: 140px;
+            border-radius: 16px 16px 0 0;
+            position: relative;
+            top: 1px; /* Overlap to hide border */
+        }
+
+        .folder-body {
+            background: #fff;
+            border-radius: 0 16px 16px 16px;
+            padding: 1.5rem;
+        }
+
+        /* Specific Floating Elements */
+        
+        /* 1. Top Left: Sticky Note & Checkbox */
+        .float-top-left {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+        }
+
+        .sticky-note {
+            background: #fef08a;
+            width: 240px;
+            padding: 2.5rem 1.5rem 1.5rem;
+            border-radius: 2px;
+            transform: rotate(-6deg);
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.08);
+            font-family: 'Caveat', cursive;
+            font-size: 1.4rem;
+            line-height: 1.2;
+            color: #374151;
+            position: relative;
+        }
+
+        .pushpin {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3), 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .pushpin::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: #9ca3af;
+        }
+
+        .checkbox-card {
+            position: absolute;
+            bottom: -30px;
+            left: -40px;
+            background: #fff;
+            width: 90px;
+            height: 90px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            transform: rotate(4deg);
+        }
+
+        .checkbox-inner {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox-inner svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        /* 2. Bottom Left: Today's Tasks */
+        .float-bottom-left {
+            bottom: 5%;
+            left: 8%;
+            width: 320px;
+            transform: rotate(-2deg);
+        }
+
+        .folder-body.tasks-body { padding: 1.5rem; }
+        .card-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 1.5rem; color: #111; }
+        
+        .task-item { margin-bottom: 1.25rem; }
+        .task-item:last-child { margin-bottom: 0; }
+        .task-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .task-icon { width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; font-weight: bold;}
+        .task-icon.red { background: #ef4444; }
+        .task-icon.green { background: #10b981; }
+        .task-title { font-size: 0.9rem; font-weight: 500; color: #374151; }
+        
+        .task-details { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #9ca3af; margin-bottom: 0.5rem; }
+        
+        .progress-bar-bg { width: 100%; height: 4px; background: #f3f4f6; border-radius: 2px; position: relative; }
+        .progress-bar-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; }
+        .fill-blue { background: #3b82f6; width: 60%; }
+        .fill-red { background: #ef4444; width: 100%; }
+
+        .avatars-mini { display: flex; align-items: center; }
+        .avatars-mini div { width: 16px; height: 16px; border-radius: 50%; background: #d1d5db; border: 1px solid #fff; margin-left: -4px; }
+        .avatars-mini div:first-child { margin-left: 0; background: #fca5a5; }
+        .avatars-mini div:nth-child(2) { background: #93c5fd; }
+
+        /* 3. Top Right: Reminders */
+        .float-top-right {
+            top: 8%;
+            right: 8%;
+            width: 280px;
+            transform: rotate(3deg);
+        }
+
+        .folder-body.reminders-body { padding: 1.5rem; }
+        .reminder-title { font-size: 0.9rem; font-weight: 600; color: #111; margin-bottom: 0.25rem; }
+        .reminder-subtitle { font-size: 0.8rem; color: #9ca3af; margin-bottom: 1rem; }
+        
+        .time-pill {
+            background: #eff6ff;
+            color: #2563eb;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 100%;
+        }
+        .time-pill span { font-size: 0.7rem; color: #93c5fd; margin-bottom: 0.25rem; font-weight: 500;}
+
+        .clock-card {
+            position: absolute;
+            top: 20px;
+            left: -60px;
+            background: #fff;
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            transform: rotate(-5deg);
+        }
+
+        .clock-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid #1f2937;
+            position: relative;
+        }
+        .clock-icon::before {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 2px; height: 10px; background: #ef4444;
+            transform-origin: bottom center;
+            transform: translate(-50%, -100%) rotate(45deg);
+        }
+        .clock-icon::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 2px; height: 14px; background: #1f2937;
+            transform-origin: bottom center;
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        /* 4. Bottom Right: Integrations */
+        .float-bottom-right {
+            bottom: 8%;
+            right: 12%;
+            width: 300px;
+            transform: rotate(-1deg);
+        }
+
+        .integrations-grid {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .integration-icon {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .integration-icon.gmail { color: #ea4335; font-family: sans-serif; letter-spacing: -2px;}
+        .integration-icon.gmail span.m { color: #4285f4; }
+        .integration-icon.slack { color: #e01e5a; }
+        .integration-icon.calendar { background: #4285f4; color: white; border-radius: 12px; height: 50px; width: 50px; display: flex; flex-direction: column; font-size: 1.2rem;}
+        .integration-icon.calendar span { background: #fff; color: #4285f4; width: 100%; text-align: center; font-size: 0.8rem; border-radius: 0 0 10px 10px; padding: 2px 0;}
+
+        /* Scanner Mockup */
+        .hero-scanner {
+            margin-top: 2.5rem;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .scanner-bar {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 0.6rem 0.6rem 0.6rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .scanner-bar:focus-within {
+            box-shadow: 0 15px 35px rgba(37,99,235,0.15), 0 0 0 2px #2563eb;
+        }
+
+        .scanner-bar svg {
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+
+        .scanner-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            color: #111;
+            background: transparent;
+            font-family: inherit;
+        }
+
+        .scanner-bar input::placeholder {
+            color: #9ca3af;
+        }
+
+        .btn-scan {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn-scan:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .scanner-hint {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* WhatsApp Simulation Section */
+        .simulation-wrapper {
+            background: linear-gradient(to bottom, rgba(240, 243, 248, 0) 0%, #f0f3f8 250px);
+            padding: 12rem 0 10rem;
+            margin-top: -2rem; /* Pull up slightly to blend with hero */
+            border-top: none;
+        }
+
+        .simulation-section {
+            display: flex;
+            align-items: center;
+            gap: 5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .sim-left {
+            flex: 1.2;
+        }
+
+        .sim-right {
+            flex: 1;
+        }
+
+        .wa-window {
+            background: #eae6df;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .wa-header {
+            background: #f0f2f5;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #d1d7db;
+        }
+
+        .wa-header .mac-dots {
+            display: flex;
+            gap: 6px;
+            margin-right: 10px;
+        }
+        .mac-dots div { width: 12px; height: 12px; border-radius: 50%; }
+        .mac-dots .red { background: #ff5f56; }
+        .mac-dots .yellow { background: #ffbd2e; }
+        .mac-dots .green { background: #27c93f; }
+
+        .wa-header-profile {
+            width: 40px; height: 40px; border-radius: 50%; background: #dfe5e7;
+            display: flex; align-items: center; justify-content: center; overflow:hidden;
+        }
+
+        .wa-body {
+            display: flex;
+            flex: 1;
+            background: #efeae2;
+        }
+
+        .wa-sidebar {
+            width: 35%;
+            background: #fff;
+            border-right: 1px solid #d1d7db;
+        }
+
+        .wa-chat-item {
+            padding: 12px 15px;
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid #f2f2f2;
+            align-items: center;
+            background: #f0f2f5;
+        }
+
+        .wa-chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 40px;
+            gap: 10px;
+            background-color: #efeae2;
+            background-image: radial-gradient(#d4cdbe 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .msg-bubble {
+            background: #fff;
+            padding: 10px 15px 12px;
+            border-radius: 8px;
+            max-width: 90%;
+            font-size: 0.95rem;
+            box-shadow: 0 1px 0.5px rgba(11,20,26,.13);
+            position: relative;
+            color: #111b21;
+            line-height: 1.5;
+        }
+
+        .msg-bubble.received {
+            border-top-left-radius: 0;
+            align-self: flex-start;
+        }
+
+        .msg-bubble .msg-time {
+            font-size: 0.7rem;
+            color: #667781;
+            float: right;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        .pish-link {
+            color: #027eb5;
+            text-decoration: underline;
+            word-break: break-all;
+            background: rgba(2, 126, 181, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .sim-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #111;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .sim-desc {
+            font-size: 1.1rem;
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        .red-flags {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .flag-item {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+        }
+        .flag-icon {
+            background: #fee2e2;
+            color: #ef4444;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .flag-text h4 { margin-bottom: 0.35rem; color: #1f2937; font-size: 1.1rem; }
+        .flag-text p { font-size: 0.95rem; color: #6b7280; line-height: 1.5; }
+
+        /* ===== FACTS SECTION (Bento Grid) ===== */
+        .facts-section {
+            padding: 10rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .facts-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .facts-header h2 {
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: -1.5px;
+            color: #111;
+            line-height: 1.2;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: auto;
+            gap: 1.25rem;
+        }
+
+        .bento-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.07);
+            border-color: #d1d5db;
+        }
+
+        .bento-card .bento-quote {
+            font-size: 0.95rem;
+            color: #374151;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .bento-card .bento-quote strong {
+            color: #111;
+            font-weight: 700;
+        }
+
+        .bento-card .bento-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: auto;
+        }
+
+        .bento-author .bento-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .bento-avatar img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .bento-avatar.blue { background: #eff6ff; }
+        .bento-avatar.red { background: #fef2f2; }
+        .bento-avatar.purple { background: #f5f3ff; }
+        .bento-avatar.amber { background: #fffbeb; }
+        .bento-avatar.green { background: #f0fdf4; }
+
+        .bento-author-info .bento-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .bento-author-info .bento-role {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Span helpers */
+        .bento-col-2 { grid-column: span 2; }
+        .bento-row-2 { grid-row: span 2; }
+
+        /* ===== RESPONSIVE: Tablet (≤1024px) ===== */
+        @media (max-width: 1024px) {
+            .navbar { padding: 1.25rem 2rem; }
+            .nav-links { gap: 1.5rem; }
+
+            .hero-section { min-height: 650px; }
+            h1 { font-size: 3.5rem; }
+
+            .float-top-left { top: 3%; left: 2%; transform: scale(0.85); }
+            .float-bottom-left { left: 2%; transform: scale(0.8) rotate(-2deg); }
+            .float-top-right { right: 2%; transform: scale(0.85) rotate(3deg); }
+            .float-bottom-right { right: 3%; transform: scale(0.8) rotate(-1deg); }
+
+            .simulation-section { gap: 3rem; padding: 0 2rem; }
+            .sim-title { font-size: 2.4rem; }
+            .wa-chat-main { padding: 15px 20px; }
+
+            .facts-section { padding: 5rem 2rem; }
+            .facts-header h2 { font-size: 2.5rem; }
+            .bento-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        }
+
+        /* ===== RESPONSIVE: Small Tablet / Large Phone (≤768px) ===== */
+        @media (max-width: 768px) {
+            .navbar { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .nav-actions .sign-in { display: none; }
+
+            .hero-section {
+                height: auto;
+                min-height: auto;
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            .hero-center { margin-top: 0; max-width: 100%; }
+            h1 { font-size: 2.5rem; letter-spacing: -1.5px; }
+            h1[style] { font-size: 2.5rem !important; }
+            .subtitle { font-size: 1rem; margin-bottom: 1.5rem; }
+            .hero-icon { width: 56px; height: 56px; margin-bottom: 1.5rem; }
+
+            /* Hide all floating cards on mobile */
+            .float-top-left,
+            .float-bottom-left,
+            .float-top-right,
+            .float-bottom-right { display: none; }
+
+            /* Scanner */
+            .hero-scanner { max-width: 100%; margin-top: 2rem; }
+            .scanner-bar { padding: 0.5rem 0.5rem 0.5rem 1rem; }
+            .scanner-bar input { font-size: 0.9rem; }
+            .btn-scan { padding: 0.8rem 1.25rem; font-size: 0.9rem; }
+            .scanner-hint { font-size: 0.8rem; }
+
+            /* Simulation section */
+            .simulation-wrapper { padding: 5rem 0 4rem; }
+            .simulation-section {
+                flex-direction: column;
+                gap: 3rem;
+                padding: 0 1.5rem;
+            }
+            .sim-left, .sim-right { flex: none; width: 100%; }
+
+            .wa-window { height: 420px; }
+            .wa-sidebar { display: none; }
+            .wa-chat-main { padding: 15px; }
+            .msg-bubble { font-size: 0.9rem; }
+
+            .sim-title { font-size: 2rem; }
+            .sim-desc { font-size: 1rem; margin-bottom: 1.5rem; }
+
+            .facts-section { padding: 3.5rem 1.5rem; }
+            .facts-header h2 { font-size: 2rem; }
+            .facts-header { margin-bottom: 2.5rem; }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .bento-col-2 { grid-column: span 1; }
+            .bento-row-2 { grid-row: span 1; }
+            .bento-icon-card { display: none; }
+        }
+
+        /* ===== RESPONSIVE: Phone (≤480px) ===== */
+        @media (max-width: 480px) {
+            .navbar { padding: 0.75rem 1rem; }
+            .logo { font-size: 1.1rem; gap: 0.5rem; }
+            .logo img { height: 26px; }
+            .btn-outline { padding: 0.5rem 1rem; font-size: 0.85rem; }
+
+            h1 { font-size: 1.85rem; letter-spacing: -1px; }
+            h1[style] { font-size: 1.85rem !important; }
+            .subtitle { font-size: 0.9rem; }
+            .hero-icon { width: 48px; height: 48px; border-radius: 14px; padding: 8px; margin-bottom: 1.25rem; }
+
+            .scanner-bar {
+                flex-direction: column;
+                border-radius: 16px;
+                padding: 0.75rem;
+                gap: 0.5rem;
+            }
+            .scanner-bar svg { display: none; }
+            .scanner-bar input {
+                width: 100%;
+                font-size: 0.9rem;
+                padding: 0.6rem 0.75rem;
+            }
+            .btn-scan {
+                width: 100%;
+                border-radius: 12px;
+                padding: 0.85rem;
+            }
+
+            .simulation-wrapper { padding: 3rem 0; }
+            .simulation-section { padding: 0 1rem; gap: 2rem; }
+
+            .wa-window { height: 360px; border-radius: 12px; }
+            .wa-chat-main { padding: 12px; }
+            .msg-bubble { font-size: 0.85rem; max-width: 100%; }
+
+            .sim-title { font-size: 1.6rem; }
+            .sim-desc { font-size: 0.9rem; margin-bottom: 1.25rem; }
+            .flag-icon { width: 36px; height: 36px; }
+            .flag-text h4 { font-size: 0.95rem; }
+            .flag-text p { font-size: 0.85rem; }
+
+            .facts-section { padding: 2.5rem 1rem; }
+            .facts-header h2 { font-size: 1.65rem; letter-spacing: -1px; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card { padding: 1.5rem; border-radius: 16px; }
+            .bento-card .bento-quote { font-size: 0.85rem; }
+        }
+        /* ===== FEATURES SHOWCASE SECTION ===== */
+        .features-showcase {
+            padding: 10rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .features-box {
+            position: relative;
+            background: #fdfdfd;
+            border: 1px solid #f0f0f0;
+            border-radius: 40px;
+            padding: 6rem 4rem 4rem 4rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.02);
+        }
+
+        .features-badge {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 0.6rem 1.8rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6b7280;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #f3f4f6;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #111;
+            letter-spacing: -1.5px;
+            margin-bottom: 1rem;
+        }
+
+        .features-header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feat-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            border: 1px solid #f8f9fa;
+            transition: transform 0.3s ease;
+        }
+
+        .feat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+        }
+
+        .feat-col-1 { grid-column: span 1; }
+        .feat-col-2 { grid-column: span 2; }
+
+        .feat-img-placeholder {
+            background: #f9fafb;
+            border-radius: 16px;
+            width: 100%;
+            min-height: 220px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feat-content {
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .feat-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 0.75rem;
+        }
+
+        .feat-content p {
+            font-size: 0.95rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Card 3 (Horizontal) */
+        .feat-row-horizontal {
+            flex-direction: row;
+            align-items: center;
+            gap: 2.5rem;
+            text-align: left;
+            padding: 2.5rem;
+        }
+
+        .feat-row-horizontal .feat-content {
+            text-align: left;
+            margin-top: 0;
+            flex: 0.4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .feat-row-horizontal .feat-img-placeholder {
+            margin-bottom: 0;
+            flex: 0.6;
+            height: 100%;
+            min-height: 280px;
+        }
+
+        .feat-arrow {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f59e0b;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #fef3c7;
+        }
+
+        /* Card 4 (Dashed) */
+        .feat-dashed {
+            background: transparent;
+            border: 2px dashed #e5e7eb;
+            box-shadow: none;
+        }
+        .feat-dashed:hover {
+            box-shadow: none;
+            border-color: #d1d5db;
+            transform: none;
+        }
+        .feat-dashed .feat-img-placeholder {
+            background: transparent;
+        }
+
+        .features-footer {
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 1rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        /* Responsive Features */
+        @media (max-width: 1024px) {
+            .features-box { padding: 5rem 2.5rem 3rem 2.5rem; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .feat-col-2 { grid-column: span 1; }
+            .feat-col-1 { grid-column: span 1; }
+            .feat-row-horizontal { flex-direction: column; }
+            .feat-row-horizontal .feat-content { text-align: center; align-items: center; }
+        }
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+            .features-box { padding: 4rem 1.5rem 2rem 1.5rem; border-radius: 24px; }
+            .features-header h2 { font-size: 2.2rem; }
+        }
+
+        /* ===== FAQ SECTION ===== */
+        .faq-section {
+            padding: 10rem 5%;
+            background: #fff;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .faq-container {
+            display: flex;
+            gap: 6rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .faq-left {
+            flex: 1;
+            position: sticky;
+            top: 100px;
+        }
+
+        .faq-left h2 {
+            font-size: 3.5rem;
+            font-weight: 500;
+            color: #111;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-left p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 2.5rem;
+            max-width: 80%;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            background: #3b82f6;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(59,130,246,0.25);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .btn-contact:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(59,130,246,0.35);
+        }
+
+        .faq-right {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: #f9fafb;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .faq-item:hover {
+            background: #f3f4f6;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #1f2937;
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #6b7280;
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.open {
+            background: #f9fafb;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border-color: #f3f4f6;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        /* Responsive FAQ */
+        @media (max-width: 1024px) {
+            .faq-container {
+                flex-direction: column;
+                gap: 3rem;
+            }
+            .faq-left {
+                position: static;
+            }
+            .faq-left h2 { font-size: 3rem; }
+        }
+        @media (max-width: 768px) {
+            .faq-left h2 { font-size: 2.5rem; }
+            .faq-question { font-size: 1rem; }
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            padding: 0;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .cta-container {
+            background: linear-gradient(180deg, #d8f1f5 0%, #ffe4b5 100%);
+            border-radius: 40px 40px 0 0;
+            padding: 8rem 5% 6rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .cta-orb {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #e0f2fe, #3b82f6, #1d4ed8);
+            box-shadow: 
+                inset -20px -20px 40px rgba(0,0,0,0.2), 
+                inset 20px 20px 40px rgba(255,255,255,0.8), 
+                0 30px 60px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+
+        .cta-float-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            z-index: 1;
+            text-align: left;
+            max-width: 320px;
+        }
+
+        .cta-float-card img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .cta-float-card p {
+            font-size: 0.8rem;
+            color: #374151;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .cta-float-card h4 {
+            font-size: 0.85rem;
+            color: #111;
+            margin: 0 0 2px 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 5;
+            margin-top: 220px; /* Space for the orb */
+        }
+
+        .cta-content h2 {
+            font-size: 4.5rem;
+            font-weight: 500;
+            color: #111;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 3rem;
+        }
+
+        .cta-form {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 6px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .cta-form input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 20px;
+            font-size: 1rem;
+            color: #111;
+            outline: none;
+        }
+
+        .cta-form input::placeholder {
+            color: #6b7280;
+        }
+
+        .cta-btn {
+            background: #111;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cta-btn:hover {
+            background: #374151;
+        }
+
+        /* Float positioning */
+        .fc-1 { top: 10%; left: 30%; transform: scale(0.9); }
+        .fc-2 { top: 25%; left: 15%; }
+        .fc-3 { top: 40%; left: 10%; transform: scale(0.85); opacity: 0.8; filter: blur(1px); }
+        .fc-4 { top: 55%; left: 20%; transform: scale(0.7); opacity: 0.6; filter: blur(2px); }
+        
+        .fc-5 { top: 12%; right: 25%; transform: scale(0.8); opacity: 0.9; }
+        .fc-6 { top: 28%; right: 15%; }
+        .fc-7 { top: 45%; right: 12%; transform: scale(0.85); opacity: 0.8; filter: blur(1px); }
+        .fc-8 { top: 58%; right: 28%; transform: scale(0.7); opacity: 0.6; filter: blur(2px); }
+
+
+        /* ===== FOOTER SECTION ===== */
+        .footer {
+            padding: 4rem 5% 2rem;
+            max-width: 100%;
+            margin: 0;
+            background: #fff;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #111;
+        }
+        
+        .footer-logo img {
+            height: 28px;
+            width: auto;
+        }
+
+        .footer-links-grid {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .footer-col h5 {
+            font-size: 0.95rem;
+            color: #111;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-col ul a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #111;
+        }
+
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: #111;
+        }
+
+        .footer-btn {
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            color: #111;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .footer-btn:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid #f3f4f6;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-links a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #6b7280;
+        }
+
+        @media (max-width: 1024px) {
+            .cta-content h2 { font-size: 3.5rem; }
+            .footer-links-grid { gap: 2rem; flex-wrap: wrap; }
+            .footer-top { flex-direction: column; gap: 3rem; }
+            .footer-right { align-items: flex-start; }
+            .cta-float-card { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .cta-content h2 { font-size: 2.5rem; }
+            .cta-container { padding: 4rem 1.5rem; }
+            .cta-orb { width: 150px; height: 150px; }
+            .cta-content { margin-top: 150px; }
+            .footer-top { flex-direction: column; gap: 2.5rem; }
+            .footer-links-grid { flex-direction: column; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="pattern-bg">
+        <!-- Navigation -->
+        <header class="navbar">
+            <div class="logo">
+                <img src="sneaker.png" alt="PishAware Logo">
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#beranda">Beranda</a>
+                <a href="#fakta-cybercrime">Fakta Cybercrime</a>
+                <a href="#faq">Tanya Jawab</a>
+                <a href="#testimoni">Testimoni</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <a href="https://wa.me/6281234567890" target="_blank" class="btn-outline">Hubungi Kami</a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <main class="hero-section" id="beranda">
+            
+            <!-- Floating Element: Top Left -->
+            <div class="float-top-left">
+                <div class="sticky-note">
+                    <div class="pushpin"></div>
+                    Apakah Indonesia benar-benar aman dari ancaman penipuan digital?
+                </div>
+              
+            </div>
+
+            <!-- Floating Element: Bottom Left -->
+            <div class="folder-card float-bottom-left">
+                <div class="folder-body tasks-body">
+                    <h3 class="card-title">Risiko Penipuan (2025)</h3>
+                    
+                    <div class="task-item">
+                        <div class="task-header" style="justify-content: space-between;">
+                            <div class="task-title">1. Pakistan</div>
+                            <span style="font-size: 0.8rem; font-weight: 600; color: #111;">7.48</span>
+                        </div>
+                        <div class="task-details" style="margin-top: 4px;">
+                            <div class="progress-bar-bg" style="width: 100%;"><div class="progress-bar-fill fill-blue" style="width: 100%;"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="task-item">
+                        <div class="task-header" style="justify-content: space-between;">
+                            <div class="task-title" style="color: #ef4444; font-weight: 600;">2. Indonesia</div>
+                            <span style="font-size: 0.8rem; font-weight: 600; color: #ef4444;">6.53</span>
+                        </div>
+                        <div class="task-details" style="margin-top: 4px;">
+                            <div class="progress-bar-bg" style="width: 100%;"><div class="progress-bar-fill fill-red" style="width: 87%;"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="task-item">
+                        <div class="task-header" style="justify-content: space-between;">
+                            <div class="task-title">3. Nigeria</div>
+                            <span style="font-size: 0.8rem; font-weight: 600; color: #111;">6.43</span>
+                        </div>
+                        <div class="task-details" style="margin-top: 4px;">
+                            <div class="progress-bar-bg" style="width: 100%;"><div class="progress-bar-fill fill-blue" style="width: 85%;"></div></div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.65rem; color: #9ca3af; margin-top: 1rem;">Sumber: Sumsub Global Fraud Index</div>
+                </div>
+            </div>
+
+            <!-- Floating Element: Top Right -->
+            <div class="folder-card float-top-right">
+                <div class="folder-body reminders-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 class="card-title" style="margin:0;">Kerugian Finansial</h3>
+                    </div>
+                    
+                    <div style="font-size: 2.2rem; font-weight: 700; color: #2563eb; line-height: 1.2; margin-bottom: 0.5rem;">
+                        <span style="font-size: 1.2rem;">Rp</span>139<span style="font-size: 1.2rem;"> Triliun</span>
+                    </div>
+                    <div class="reminder-subtitle" style="margin-bottom: 0;">Total kerugian akibat penipuan (OJK 2023)</div>
+                </div>
+               
+            </div>
+
+            <!-- Floating Element: Bottom Right -->
+            <div class="folder-card float-bottom-right">
+                <div class="folder-body">
+                    <h3 class="card-title" style="margin-bottom: 1rem;">Statistik Internet</h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: #111; line-height: 1.1;">185 Juta</div>
+                            <div style="font-size: 0.8rem; color: #6b7280;">Pengguna Internet</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: #111; line-height: 1.1;">66,5%</div>
+                            <div style="font-size: 0.8rem; color: #6b7280;">Penetrasi Internet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Content -->
+            <div class="hero-center">
+                <div class="hero-icon">
+                    <img src="logo.png" alt="PishAware Icon" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                </div>
+                
+                <h1 style="font-size: 4rem; letter-spacing: -1.5px;">Penipuan Digital Menjadi<br><span class="text-grey">Masalah Nyata di Indonesia</span></h1>
+                
+                <p class="subtitle">Indonesia berada pada peringkat kedua dalam tingkat penipuan digital tertinggi di dunia.</p>
+                
+                <div class="hero-scanner">
+                    <div class="scanner-bar">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" placeholder="Tempel URL yang mencurigakan di sini">
+                        <button class="btn-scan">Periksa Link</button>
+                    </div>
+                    <div class="scanner-hint">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        Didukung oleh AI. Deteksi ancaman phishing secara instan.
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- WhatsApp Simulation Section -->
+        <div class="simulation-wrapper">
+            <section class="simulation-section">
+                <div class="sim-left">
+                <div class="wa-window">
+                    <div class="wa-header">
+                        <div class="mac-dots">
+                            <div class="red"></div><div class="yellow"></div><div class="green"></div>
+                        </div>
+                        <div class="wa-header-profile">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="#aebac1"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <div style="font-weight: 600; color: #111b21;">Bank XYZ Resmi</div>
+                    </div>
+                    <div class="wa-body">
+                        <div class="wa-sidebar">
+                            <div class="wa-chat-item">
+                                <div class="wa-header-profile">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="#aebac1"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <span style="font-weight: 600; font-size: 0.9rem;">Bank XYZ Resmi</span>
+                                        <span style="font-size: 0.75rem; color:#667781;">10:42</span>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color:#667781; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">Selamat! Anda me...</div>
+                                </div>
+                            </div>
+                            <div class="wa-chat-item" style="background: #fff; opacity: 0.5;">
+                                <div class="wa-header-profile" style="background:#ddd;"></div>
+                                <div style="width: 100%;"><div style="background:#eee; height:12px; width:70%; margin-bottom:8px;"></div><div style="background:#eee; height:10px; width:90%;"></div></div>
+                            </div>
+                             <div class="wa-chat-item" style="background: #fff; opacity: 0.3;">
+                                <div class="wa-header-profile" style="background:#ddd;"></div>
+                                <div style="width: 100%;"><div style="background:#eee; height:12px; width:50%; margin-bottom:8px;"></div><div style="background:#eee; height:10px; width:80%;"></div></div>
+                            </div>
+                        </div>
+                        <div class="wa-chat-main">
+                            <div style="background: #e1f5fe; padding: 6px 12px; border-radius: 8px; align-self: center; font-size: 0.75rem; color: #54656f; margin-bottom: 10px;">HARI INI</div>
+                            
+                            <div class="msg-bubble received">
+                                Selamat! 🥳 Nomor Anda terpilih memenangkan undian <strong>Rp 10.000.000</strong> dari Festival Bank XYZ!
+                                <br><br>
+                                Segera klaim hadiah Anda sebelum hangus dalam 24 jam dengan klik link resmi kami di bawah ini:
+                                <br><br>
+                                <a href="#" class="pish-link">http://bankxyz-promo-hadiah.weebly.com</a>
+                                <br><br>
+                                Harap tidak membagikan link ini kepada siapapun demi keamanan hadiah Anda.
+                                <span class="msg-time">10:42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sim-right">
+                <h2 class="sim-title">Kenali Modus Pesan Phishing di WhatsApp</h2>
+                <p class="sim-desc">Penipu menggunakan taktik psikologis untuk memanipulasi korban. Berikut adalah 3 bendera merah ("Red Flags") utama dari contoh pesan di samping:</p>
+                
+                <div class="red-flags">
+                    <div class="flag-item">
+                        <img src="gift.jpeg" class="flag-icon" style="object-fit: cover; padding: 0;" alt="Gift">
+                        <div class="flag-text">
+                            <h4>Terlalu Indah untuk Menjadi Nyata</h4>
+                            <p>Menawarkan hadiah besar (uang, mobil) tanpa alasan yang jelas atau tanpa Anda pernah mengikuti program undian apapun.</p>
+                        </div>
+                    </div>
+                    <div class="flag-item">
+                        <img src="time.jpeg" class="flag-icon" style="object-fit: cover; padding: 0;" alt="Time">
+                        <div class="flag-text">
+                            <h4>Desakan Waktu (Urgensi)</h4>
+                            <p>Menciptakan kepanikan agar Anda bertindak cepat (misal: "hangus dalam 24 jam") sehingga Anda tidak sempat berpikir kritis.</p>
+                        </div>
+                    </div>
+                    <div class="flag-item">
+                        <img src="url.jpeg" class="flag-icon" style="object-fit: cover; padding: 0;" alt="URL">
+                        <div class="flag-text">
+                            <h4>Tautan (Link) Mencurigakan</h4>
+                            <p>Menggunakan domain gratisan (seperti <i>.weebly.com</i> atau ejaan yang dipelesetkan) yang berpura-pura menjadi situs web institusi resmi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+
+               <!-- Fakta Cybercrime Section -->
+        <section class="facts-section" id="fakta-cybercrime">
+            <div class="facts-header">
+                <h2>Ancaman siber bukan sekadar<br>angka — ini kenyataan</h2>
+            </div>
+
+            <div class="bento-grid">
+                <!-- Row 1 -->
+                <!-- Card 1: Kerugian Global (tall left) -->
+                <div class="bento-card bento-row-2">
+                    <div class="bento-quote">
+                        "Cybercrime menyebabkan kerugian lebih dari <strong>US$16 miliar</strong> pada tahun 2024 — meningkat 33% dari tahun sebelumnya. FBI mencatat hampir <strong>860.000 laporan</strong> kejahatan siber."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar blue"><img src="AI_robot_head_money_bills_202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">$16 Miliar</div>
+                            <div class="bento-role">Kerugian Global 2024</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Phishing -->
+                <div class="bento-card bento-col-2">
+                    <div class="bento-quote">
+                        "Kaspersky mencatat lebih dari <strong>893 juta percobaan phishing</strong> diblokir sepanjang 2024. Angka ini naik 26% dibanding 2023."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar red"><img src="Phishing_hook_catching_email_env__202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">893 Juta</div>
+                            <div class="bento-role">Percobaan Phishing Diblokir</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Media Penipu -->
+                <div class="bento-card">
+                    <div class="bento-quote">
+                        "Serangan melalui <strong>SMS (smishing)</strong> dan <strong>telepon (vishing)</strong> meningkat pesat. 37% serangan menargetkan media sosial pada 2024."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar amber"><img src="Smartphone_displaying_chat_notif__202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">38%</div>
+                            <div class="bento-role">Serangan Global via Phishing</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <!-- Card 5: Serangan per kuartal -->
+                <div class="bento-card bento-col-2">
+                    <div class="bento-quote">
+                        "Pada Q1 2025, APWG mencatat lebih dari <strong>1 juta serangan phishing</strong> hanya dalam satu kuartal. Seperempat serangan terhadap perusahaan berasal dari phishing berbasis <strong>link atau lampiran berbahaya</strong>."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar purple"><img src="Colorful_bar_chart_analytics_das__202605302110-removebg-preview (1).png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">1 Juta+</div>
+                            <div class="bento-role">Serangan per Kuartal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7: Dampak Korban -->
+                <div class="bento-card">
+                    <div class="bento-quote">
+                        "Korban phishing bisa kehilangan <strong>uang, akun media sosial, data pribadi, dan identitas digital</strong>. Banyak akun korban digunakan untuk menipu orang lain secara berantai."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar red"><img src="Yellow_warning_triangle_cybersec__202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">Dampak Korban</div>
+                            <div class="bento-role">Kerugian Finansial & Digital</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <!-- Card 8: Deepfake -->
+                <div class="bento-card">
+                    <div class="bento-quote">
+                        "AI digunakan untuk membuat <strong>email phishing lebih meyakinkan, deepfake suara/video</strong>, dan pesan penipuan otomatis. Satu insiden deepfake menyebabkan kerugian <strong>$25 juta</strong>."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar green"><img src="AI_brain_connected_microchip_202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">$25 Juta</div>
+                            <div class="bento-role">Kerugian Deepfake</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 10: Psikologi -->
+                <div class="bento-card bento-col-2">
+                    <div class="bento-quote">
+                        "Banyak korban phishing bukan karena kurang pintar, tetapi karena <strong>penipu memanfaatkan emosi dan urgensi</strong> sehingga korban mengambil keputusan secara terburu-buru. Pesan phishing modern sering dibuat sangat <strong>mirip dengan komunikasi resmi</strong>."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar amber"><img src="Brain_with_question_mark_icon_202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">Psikologi Korban</div>
+                            <div class="bento-role">Mengapa Mudah Tertipu?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 11: Fakta penutup -->
+                <div class="bento-card">
+                    <div class="bento-quote">
+                        "Rasa panik saat menerima pesan <strong>'akun akan diblokir'</strong>, tergiur hadiah palsu, dan kurangnya <strong>literasi keamanan digital</strong> menjadi pintu masuk utama penipu memanipulasi korbannya."
+                    </div>
+                    <div class="bento-author">
+                        <div class="bento-avatar green"><img src="Brain_with_question_mark_icon_202605302110-removebg-preview.png" alt="Icon"></div>
+                        <div class="bento-author-info">
+                            <div class="bento-name">Literasi Digital</div>
+                            <div class="bento-role">Kunci Perlindungan Diri</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="faq-container">
+                <div class="faq-left">
+                    <h2 style="font-size: 3rem; letter-spacing: -1px;">Masalah yang<br>Sering<br>Terjadi</h2>
+                    <p>Temukan solusi dan cara mengatasi berbagai indikasi penipuan yang mungkin sedang Anda alami saat ini.</p>
+                    <a href="https://wa.me/6281234567890" target="_blank" class="btn-contact">Butuh Bantuan Lanjut?</a>
+                </div>
+                <div class="faq-right">
+                    
+                    <div class="faq-item open">
+                        <div class="faq-question">
+                            <span>Saya mendapat email dari bank yang meminta verifikasi akun</span>
+                            <span class="faq-icon">×</span>
+                        </div>
+                        <div class="faq-answer">
+                            <strong style="color: #111;">Cara Mengatasinya:</strong><br>
+                            Jangan klik link di dalam email. Buka website bank secara manual melalui browser atau aplikasi resmi. Periksa alamat pengirim dan pastikan domainnya benar.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Saya menerima link mencurigakan dari teman</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <strong style="color: #111;">Cara Mengatasinya:</strong><br>
+                            Akun teman Anda mungkin telah diretas. Konfirmasi terlebih dahulu melalui telepon atau chat lain sebelum membuka link tersebut.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Saya mendapat SMS hadiah atau undian</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <strong style="color: #111;">Cara Mengatasinya:</strong><br>
+                            Waspadai pesan yang menciptakan rasa urgensi atau menawarkan hadiah besar. Jangan mengisi data pribadi atau OTP melalui link yang dikirim.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Saya melihat video atau suara tokoh terkenal di media sosial</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <strong style="color: #111;">Cara Mengatasinya:</strong><br>
+                            Periksa sumber video, cari berita pendukung dari media terpercaya, dan waspadai kemungkinan deepfake yang dibuat menggunakan AI.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section" id="testimoni">
+            <div class="cta-container">
+                
+                <!-- Floating Cards -->
+                <div class="cta-float-card fc-1">
+                    <img src="profile_budi_1780156177054.png" alt="User">
+                    <div>
+                        <h4>Budi S.</h4>
+                        <p>"Uang di rekening saya terkuras habis setelah klik satu link..."</p>
+                    </div>
+                </div>
+                <div class="cta-float-card fc-2">
+                    <img src="profile_siti_1780156193161.png" alt="User">
+                    <div>
+                        <h4>Siti Rahmawati</h4>
+                        <p>"Saya pikir itu email resmi dari bank saya."</p>
+                    </div>
+                </div>
+                <div class="cta-float-card fc-3">
+                    <img src="profile_agus_1780156209301.png" alt="User">
+                    <div>
+                        <h4>Agus Pratama</h4>
+                        <p>"Teman saya minta transfer uang, ternyata akunnya diretas."</p>
+                    </div>
+                </div>
+                <div class="cta-float-card fc-4">
+                    <img src="profile_rina_1780156228445.png" alt="User">
+                    <div>
+                        <h4>Rina M.</h4>
+                        <p>"Kode OTP saya berikan, WhatsApp saya diambil alih."</p>
+                    </div>
+                </div>
+
+                <div class="cta-float-card fc-5">
+                    <img src="profile_hendra_1780156245861.png" alt="User">
+                    <div>
+                        <h4>Hendra W.</h4>
+                        <p>"Awalnya iseng ikut kuis berhadiah, malah data dicuri."</p>
+                    </div>
+                </div>
+                <div class="cta-float-card fc-6">
+                    <img src="profile_dewi_1780156267374.png" alt="User">
+                    <div>
+                        <h4>Dewi Lestari</h4>
+                        <p>"Suaranya persis seperti atasan saya, saya percaya saja."</p>
+                    </div>
+                </div>
+                <div class="cta-float-card fc-7">
+                    <img src="profile_faisal_1780156283112.png" alt="User">
+                    <div>
+                        <h4>Faisal H.</h4>
+                        <p>"Tiba-tiba ada tagihan kartu kredit belasan juta."</p>
+                    </div>
+                </div>
+                <div class="cta-float-card fc-8">
+                    <img src="profile_anita_1780156301495.png" alt="User">
+                    <div>
+                        <h4>Anita Kusuma</h4>
+                        <p>"Kurir palsu mengirim file .APK, saya tidak sadar."</p>
+                    </div>
+                </div>
+
+                <!-- Center Orb -->
+                <div class="cta-orb"></div>
+
+                <!-- Content -->
+                <div class="cta-content">
+                    <h2>Jangan biarkan cerita mereka<br>menjadi cerita Anda</h2>
+                    
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div>© 2025 PishAware AI. All rights reserved.</div>
+            <div class="footer-bottom-links">
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Accordion Logic
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.faq-icon').textContent = '+';
+                });
+
+                // Toggle the clicked item
+                if (!isOpen) {
+                    item.classList.add('open');
+                    item.querySelector('.faq-icon').textContent = '×';
+                }
+            });
+        });
+
+        // Scroll Reveal Animation Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.hero-center, .folder-card, .sim-left, .sim-right, .bento-card, .faq-left, .faq-item, .cta-container, .cta-float-card');
+            
+            // Initial setup for JS-enabled clients
+            elementsToAnimate.forEach(el => el.classList.add('scroll-reveal'));
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Optional slight stagger for multiple items appearing at once
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 50);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            elementsToAnimate.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
