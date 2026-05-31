@@ -50,8 +50,22 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.5rem 3rem;
-            position: relative;
-            z-index: 10;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .logo {
@@ -1481,7 +1495,8 @@
         <!-- Navigation -->
         <header class="navbar">
             <div class="logo">
-                <img src="sneaker.png" alt="PishAware Logo">
+                <img src="pishAware.png" alt="PishAware Logo">
+                <span>PishAware</span>
             </div>
             
             <nav class="nav-links">
@@ -1592,13 +1607,15 @@
                 <div class="hero-scanner">
                     <div class="scanner-bar">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" placeholder="Tempel URL yang mencurigakan di sini">
-                        <button class="btn-scan">Periksa Link</button>
+                        <input type="text" id="urlInput" placeholder="Tempel URL yang mencurigakan di sini">
+                        <button class="btn-scan" id="scanBtn" onclick="cekPhishing()">Periksa Link</button>
                     </div>
                     <div class="scanner-hint">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                         Didukung oleh AI. Deteksi ancaman phishing secara instan.
                     </div>
+                    <!-- Tempat menampilkan hasil scan AI -->
+                    <div id="scanResult" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; text-align: left; background: rgba(255,255,255,0.9); font-size: 0.95rem; color: #111; box-shadow: 0 4px 6px rgba(0,0,0,0.1); line-height: 1.5;"></div>
                 </div>
             </div>
 
@@ -2000,6 +2017,57 @@
 
             elementsToAnimate.forEach(el => observer.observe(el));
         });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Gemini Phishing Checker Logic
+        async function cekPhishing() {
+            const urlInput = document.getElementById('urlInput').value;
+            const resultDiv = document.getElementById('scanResult');
+            const btn = document.getElementById('scanBtn');
+            
+            if (!urlInput) {
+                alert("Silakan masukkan URL atau teks email terlebih dahulu!");
+                return;
+            }
+
+            // UI Loading state
+            btn.innerText = "Memeriksa...";
+            btn.disabled = true;
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<span style="color:#2563eb;">⏳ AI sedang menganalisis URL/Email Anda...</span>';
+
+            try {
+                const response = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pesan: `Tolong analisis apakah url atau email ini terindikasi phishing atau penipuan. Berikan penjelasan singkat, langsung pada intinya (maksimal 3 paragraf), dan berikan kesimpulan AMAN atau BERBAHAYA. Teks/URL: ${urlInput}` })
+                });
+
+                if (!response.ok) throw new Error("Terjadi kesalahan pada server. Pastikan API key sudah diatur di environment variable.");
+                
+                const data = await response.json();
+                
+                // Format balasan Gemini (ubah newline ke <br>)
+                const formattedReply = data.balasan.replace(/\n/g, '<br>');
+                resultDiv.innerHTML = `<strong>Hasil Analisis AI:</strong><br><br>${formattedReply}`;
+
+            } catch (error) {
+                console.error(error);
+                resultDiv.innerHTML = '<span style="color:#ef4444;">❌ Maaf, terjadi kesalahan saat menghubungi AI. (Jika dijalankan di lokal tanpa Vercel CLI, fetch ke /api/gemini mungkin gagal).</span>';
+            } finally {
+                btn.innerText = "Periksa Link";
+                btn.disabled = false;
+            }
+        }
     </script>
 </body>
 </html>
