@@ -2049,16 +2049,19 @@
                 const response = await fetch('/api/gemini', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ pesan: `Tolong analisis apakah url atau email ini terindikasi phishing atau penipuan. Berikan penjelasan singkat, langsung pada intinya (maksimal 3 paragraf), dan berikan kesimpulan AMAN atau BERBAHAYA. Teks/URL: ${urlInput}` })
+                    body: JSON.stringify({ pesan: `Tolong analisis apakah url atau email ini terindikasi phishing atau penipuan. Jawab dengan sangat singkat, padat, dan jelas (maksimal 2-3 kalimat saja). Berikan kesimpulan AMAN atau BERBAHAYA di awal kalimat. Teks/URL: ${urlInput}` })
                 });
 
                 if (!response.ok) throw new Error("Terjadi kesalahan pada server. Pastikan API key sudah diatur di environment variable.");
                 
                 const data = await response.json();
                 
-                // Format balasan Gemini (ubah newline ke <br>)
-                const formattedReply = data.balasan.replace(/\n/g, '<br>');
-                resultDiv.innerHTML = `<strong>Hasil Analisis AI:</strong><br><br>${formattedReply}`;
+                // Format balasan Gemini
+                let formattedReply = data.balasan.replace(/\n/g, '<br>'); // Enter ke <br>
+                formattedReply = formattedReply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // **Teks** ke Bold
+                formattedReply = formattedReply.replace(/\*(.*?)\*/g, '<em>$1</em>'); // *Teks* ke Italic
+
+                resultDiv.innerHTML = `<div style="font-size: 1rem;"><strong>Hasil Analisis AI:</strong><br><br>${formattedReply}</div>`;
 
             } catch (error) {
                 console.error(error);
